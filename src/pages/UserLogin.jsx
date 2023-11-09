@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios'
+import Alert from 'react-bootstrap/Alert';
 import {
 
   MDBContainer,
@@ -20,7 +21,8 @@ import { useDispatch } from 'react-redux';
 import { login } from '../features/auth';
 
 function UserLogin() {
-
+  const [show, setShow] = useState(true);
+  const [showSuccess, setShowSuccess] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogin = async ()=>{
@@ -34,20 +36,33 @@ function UserLogin() {
   try {
     const response = await axios.post(url,payload);
     const res = response.data;
-    alert("Login Successfully")
+    // alert("Login Successfully")
+    setShow(true)
+    setShowSuccess(true)
     // navigate('/adminhome')
     
     dispatch(login(res));
     if(res.roles[0]==='ROLE_USER')
     {
-      navigate('/userhome')
+      setTimeout(() => {
+        setShowSuccess(false);
+        navigate('/userhome') // Redirect to userhome
+      }, 1000);
+
+      // navigate('/userhome')
+
     }else if(res.roles[0]==='ROLE_ADMIN')
     {
-      navigate('/adminhome')
+      setTimeout(() => {
+        setShowSuccess(false);
+        navigate('/adminhome') // Redirect to userhome
+      }, 1000);
+      // navigate('/adminhome')
     }
 
 } catch (error) {
-    alert(error);
+    // alert(error);
+    setShow(false);
 }
 
   }
@@ -55,6 +70,14 @@ function UserLogin() {
 
   return (
     <div className='container'>
+
+      <Alert variant="success" show={showSuccess} className='mt-2' onClose={() => setShowSuccess(false)} dismissible>
+                 <Alert.Heading>Logged In Successfully</Alert.Heading>
+      </Alert>
+
+      <Alert variant="danger" show={!show} className='mt-2' onClose={() => setShow(true)} dismissible>
+        <Alert.Heading>Wrong UserEmail or Password</Alert.Heading>
+      </Alert>
     <MDBContainer fluid className='p-10'>
 
       <MDBRow>

@@ -9,6 +9,7 @@ function ViewYourTicket() {
 
     const { username } = useSelector((state) => state.auth.value);
     const [tickets, setTickets] = useState([]);
+    
 
     useEffect(() => {
         const fetchData = async () => {
@@ -51,7 +52,10 @@ function ViewYourTicket() {
 
         <div className='container' style={{marginTop:"8rem"}}>
 
-            {
+            <h1>My Tickets</h1>
+            
+
+                {
                 tickets?.map(ticket =>
                     <div class="card my-4">
                         <h2 class="card-header text-center">
@@ -87,39 +91,6 @@ function ViewYourTicket() {
                                     </tbody>
 
                                 </table>
-
-                                <h2>Passenger Details</h2>
-
-                                <table className="table table-bordered ">
-                                    <thead>
-                                        <tr>
-                                            <th> Passenger Name </th>
-                                            <th> Passenger Age </th>
-                                            <th> Passenger Mobile No </th>
-                                            <th> Passenger Aadhar No </th>
-                                            
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    {ticket.passengers.map((value,index) => (
-                                                    
-                                            <tr>
-                                            <td>{value.name}</td>
-                                            <td>{value.age}</td>
-                                            <td>{value.mobileNo}</td>
-                                            <td>{value.aadhar}</td>
-                                        
-                                         </tr>
-                                                   
-                                        ))}
-
-                                        
-
-                                    </tbody>
-
-                                </table>
-
-                            
 
                             <Link to={"/viewTicket"} class="btn btn-danger" onClick={()=>{deleteTicket(ticket.pnrNo)}}>Cancel Ticket</Link>
                         </div>

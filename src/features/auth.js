@@ -5,6 +5,7 @@ const initialState = {
   roles: [],
   accessToken: "",
   tokenType: "Bearer",
+  isLoggedIn: false, // Add the isLoggedIn property
 };
  
 export const authSlice = createSlice({
@@ -12,7 +13,7 @@ export const authSlice = createSlice({
   initialState: { value: initialState },
   reducers: {
     login: (state, action) => {
-      state.value = action.payload;
+      state.value = {...action.payload ,  isLoggedIn: true }
     },
     logout: (state) => {
       state.value = initialState;

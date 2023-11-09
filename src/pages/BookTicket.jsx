@@ -3,6 +3,7 @@ import Navber from './Navber'
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import { useSelector } from 'react-redux';
+import Alert from 'react-bootstrap/Alert';
 
 function BookTicket() {
 
@@ -14,6 +15,7 @@ function BookTicket() {
     const navigate = useNavigate();
     const[totalPrice,setTotalPrice ]= useState(0);
     const { username } = useSelector((state) => state.auth.value);
+    const [show, setShow] = useState(false);
 
     // var price = 0;
 
@@ -66,13 +68,19 @@ function BookTicket() {
 
         var razorpay = new window.Razorpay(options);
         razorpay.open();
-        addTicketHandler();
+        
 
 
     }
 
     function processResponse(resp) {
         console.log(resp);
+        if(resp)
+        {
+            addTicketHandler();
+        }else{
+            console.log("Payment is not done ");
+        }
     }
 
 
@@ -123,8 +131,13 @@ const clicked = ()=>{
 
           const response =  await axios.post("http://localhost:9092/ticket/createTicket",payload)
           console.log(response.data)
-          alert("Ticket Created")
-          navigate('/viewTicket')
+        //   alert("Ticket Created")
+            setShow(true);
+            setTimeout(() => {
+                setShow(false);
+                navigate('/viewTicket') // Redirect to viewticket
+              }, 1000);
+         
            
         } catch (error) {
             alert(error);
@@ -139,6 +152,11 @@ const clicked = ()=>{
             <Navber />
 
             <div className='container' style={{ width: "60%", marginTop: "6rem" }}>
+
+            <Alert variant="success" show={show} className='mt-2' onClose={() => setShow(false)} dismissible>
+                 <Alert.Heading>Ticket Booked Successfully</Alert.Heading>
+            </Alert>
+
                 <h2 className='my-4'>Booking Details</h2>
                 <form>
                     <div class="form-row">
